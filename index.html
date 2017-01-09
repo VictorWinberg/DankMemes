@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Dank</title>
+
+  <style type="text/css">
+    body {
+      background-color: black;
+      background-size: 100%;
+      text-align: center;
+      color: white;
+    }
+
+    input {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      width: 250px;
+      padding: 5px;
+    }
+
+    .center {
+        position: absolute;
+        width: 400px;
+        height: 50px;
+        top: 33%;
+        left: 50%;
+        margin-left: -200px;
+        margin-top: -25px;
+    }​
+
+  </style>
+
+  <script type="text/javascript">
+    var danks = new Array('mildhane', 'dankanton');
+    var flicker = 1;
+
+    onload = function () {
+      document.getElementById('dank').style.display = "none";
+      document.getElementById('flick').style.display = "none";
+
+      var e = document.getElementById('myInput');
+      e.oninput = myHandler;
+
+      startFlick();
+
+      setInterval(function helper() {
+        document.getElementById('myInput').placeholder = "Search for " + danks[Math.floor(Math.random() * danks.length)];
+        }, Math.floor(Math.random() * 5000) + 5000);
+    };
+
+    function startFlick() {
+      setInterval(function flick() {
+        if(flicker == 0)
+          return;
+        document.getElementById('flick').style.display = "block";
+        document.getElementById('flickimg').src = "img/" + danks[Math.floor(Math.random() * danks.length)] + ".jpg";
+        setTimeout(function () {
+            document.getElementById('flick').style.display = "none";
+          }, 30);
+        }, 250);
+    }
+
+    function myHandler() {
+      var i = danks.indexOf(document.getElementById('myInput').value);
+      if(i != -1) {
+        dank(danks[i]);
+      }
+    }
+
+    var bgColor;
+    function dank(dank) {
+      document.getElementById('dank').style.display = "block";
+      document.getElementById('dankimg').src = "img/" + dank + ".jpg";
+      document.getElementById('danksound').src = "audio/" + dank + ".mp3";
+      document.getElementById('danksound').play();
+
+      document.getElementById('controller').style.display = "none";
+      flicker = 0;
+
+      var i;
+      bgColor = setInterval(function bgColor() {
+          if(i == 0) {
+              color = "#4D0000";
+              i = 1;
+          } else {
+              color = "black";
+              i = 0;
+          }
+          document.body.style.background = color;
+        }, 500);
+    }
+
+    document.onkeypress = function(e) {
+      document.getElementById('dank').style.display = "none";
+      document.getElementById('danksound').pause();
+      document.getElementById('danksound').currentTime = 0;
+      clearInterval(bgColor);
+
+      document.getElementById('controller').style.display = "block";
+      flicker = 1;
+      document.body.style.background = "black";
+    }
+  </script>
+
+</head>
+
+<body>
+  <font face="Courier" color="GREEN">
+    <div class="center" id="controller">
+      <h1 style="font-size:32pt">Dank Meme Browser</h1>
+      <input id="myInput" type="text" placeholder="Search for dankmemes">
+      <h2 id="tooltip"></h2>
+    </div>
+
+    <div id="flick">
+      <img id="flickimg" src="" alt="DankMeme?" style="opacity:0.07;">
+    </div>
+
+    <div id="dank">
+      <br><br><br>
+      <img id ="dankimg" src="" alt="DankMeme?">
+    </div>
+
+  </font>
+  <audio id="danksound" src="" loop="true" hidden="true"></audio>
+</body>
+
+</html>
